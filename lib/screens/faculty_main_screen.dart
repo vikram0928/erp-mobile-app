@@ -6,6 +6,7 @@ import 'today_classes_screen.dart';
 import 'weekly_schedule_screen.dart';
 import 'students_list_screen.dart';
 import 'profile_screen.dart';
+import 'login_screen.dart';
  
 const primaryColor = Color(0xFF1D63D1);
  
@@ -51,6 +52,14 @@ class _FacultyMainScreenState extends State<FacultyMainScreen> {
         title: Text(_titleFor(currentTab)),
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          if (currentTab == 4)
+            IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: "Logout",
+              onPressed: () => _showLogoutDialog(context),
+            ),
+        ],
       ),
       body: IndexedStack(index: currentTab, children: tabs),
       bottomNavigationBar: BottomNavigationBar(
@@ -83,6 +92,43 @@ class _FacultyMainScreenState extends State<FacultyMainScreen> {
       default:
         return "My Profile";
     }
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.logout, color: Colors.red),
+            SizedBox(width: 8),
+            Text("Confirm Logout"),
+          ],
+        ),
+        content: const Text("Are you sure you want to log out of REC Sonbhadra ERP?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await ApiService.logout();
+              if (!mounted) return;
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+            child: const Text("Logout", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
   }
 }
  

@@ -38,31 +38,15 @@ class _TodayClassesTabState extends State<TodayClassesTab> {
           : int.tryParse(widget.user['id']?.toString() ?? '1') ?? 1;
 
       final timetable = await ApiService.getFacultyTimetable(facultyId);
-      var dayClasses = timetable.where((e) {
+
+      // Only show classes that are actually scheduled for this specific day.
+      // No fallback to dummy/subject-mapped classes — if the day has no entries
+      // in the timetable the empty-state UI is shown instead.
+      final dayClasses = timetable.where((e) {
         final d = (e['day_of_week'] ?? '').toString().trim().toLowerCase();
         return d == dayStr.toLowerCase();
-      }).toList();
-
-      // Fallback: If no timetable slots seeded for today, map faculty's assigned subjects
-      if (dayClasses.isEmpty) {
-        final subjects = await ApiService.getFacultySubjects(facultyId);
-        dayClasses = subjects.asMap().entries.map((entry) {
-          final idx = entry.key;
-          final sub = entry.value;
-          return {
-            "id": sub['id'] ?? (idx + 1),
-            "period_no": idx + 1,
-            "day_of_week": dayStr,
-            "year": sub['year'] ?? "Y2",
-            "room": sub['room'] ?? "A-205",
-            "subject": sub,
-            "subject_name": sub['subject_name'],
-            "subject_code": sub['subject_code'],
-          };
-        }).toList();
-      }
-
-      dayClasses.sort((a, b) => (a['period_no'] ?? 0).compareTo(b['period_no'] ?? 0));
+      }).toList()
+        ..sort((a, b) => (a['period_no'] ?? 0).compareTo(b['period_no'] ?? 0));
 
       setState(() {
         classes = dayClasses;
@@ -70,7 +54,7 @@ class _TodayClassesTabState extends State<TodayClassesTab> {
       });
 
       // Schedule reminders (15-min before & at class time)
-      _scheduleClassNotifications(dayClasses);
+      if (dayClasses.isNotEmpty) _scheduleClassNotifications(dayClasses);
     } catch (e) {
       setState(() {
         classes = [];

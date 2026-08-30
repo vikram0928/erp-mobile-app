@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -473,7 +474,11 @@ class ApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body) as List<dynamic>;
       }
-    } catch (_) {}
+      // Log non-200 responses so issues are visible in debug console
+      debugPrint('[getRaw] HTTP ${response.statusCode} for $url — body: ${response.body.substring(0, response.body.length.clamp(0, 300))}');
+    } catch (e) {
+      debugPrint('[getRaw] Exception for $url — $e');
+    }
     return [];
   }
 

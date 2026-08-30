@@ -154,44 +154,47 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.grey.shade200),
                     ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                      leading: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(sNo, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey)),
-                          const SizedBox(width: 10),
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: primaryColor.withValues(alpha: 0.1),
-                            child: Text(
-                              name[0].toUpperCase(),
-                              style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                    child: Material(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(sNo, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey)),
+                            const SizedBox(width: 10),
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: primaryColor.withValues(alpha: 0.1),
+                              child: Text(
+                                name[0].toUpperCase(),
+                                style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        title: Text(
+                          name,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                        subtitle: Text(
+                          "Roll No: $roll",
+                          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                        ),
+                        trailing: const Icon(Icons.chevron_right, color: primaryColor),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => StudentDetailScreen(student: student),
+                            ),
+                          );
+                        },
                       ),
-                      title: Text(
-                        name,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      subtitle: Text(
-                        "Roll No: $roll",
-                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                      ),
-                      trailing: const Icon(Icons.chevron_right, color: primaryColor),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => StudentDetailScreen(student: student),
-                          ),
-                        );
-                      },
                     ),
                   );
                 },

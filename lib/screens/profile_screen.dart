@@ -189,164 +189,149 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: const Text("My Profile"),
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: "Logout",
-            onPressed: handleLogout,
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // ---- Profile Photo ----
-          Center(
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundColor: primaryColor.withValues(alpha: 0.1),
-                      backgroundImage: photoUrl != null && photoUrl!.isNotEmpty
-                          ? NetworkImage(photoUrl!)
-                          : null,
-                      child: photoUrl == null || photoUrl!.isEmpty
-                          ? const Icon(Icons.person, size: 48, color: primaryColor)
-                          : null,
-                    ),
-                    if (uploadingPhoto)
-                      Positioned.fill(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black45,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // ---- Profile Photo ----
+        Center(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: primaryColor.withValues(alpha: 0.1),
+                    backgroundImage: photoUrl != null && photoUrl!.isNotEmpty
+                        ? NetworkImage(photoUrl!)
+                        : null,
+                    child: photoUrl == null || photoUrl!.isEmpty
+                        ? const Icon(Icons.person, size: 48, color: primaryColor)
+                        : null,
+                  ),
+                  if (uploadingPhoto)
+                    Positioned.fill(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.black45,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
                             ),
                           ),
                         ),
                       ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: uploadingPhoto ? null : pickAndUploadPhoto,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
+                    ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: uploadingPhoto ? null : pickAndUploadPhoto,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
+                        child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Tap the camera icon to change photo",
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          _card(
-            title: "Profile Information",
-            message: profileMessage,
-            success: profileSuccess,
-            children: [
-              _field("Full Name", nameCtrl),
-              _field("Designation", designationCtrl),
-              _field("Email", emailCtrl, keyboard: TextInputType.emailAddress),
-              _field("Contact Number", contactCtrl, keyboard: TextInputType.phone),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: savingProfile ? null : saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: savingProfile
-                      ? const SizedBox(
-                          height: 18, width: 18,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : const Text("Save Changes"),
-                ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Tap the camera icon to change photo",
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+        ),
+        const SizedBox(height: 20),
 
-          _card(
-            title: "Change Password",
-            message: passwordMessage,
-            success: passwordSuccess,
-            children: [
-              _field("New Password", newPasswordCtrl, obscure: true),
-              _field("Confirm New Password", confirmPasswordCtrl, obscure: true),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: savingPassword ? null : savePassword,
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: savingPassword
-                      ? const SizedBox(
-                          height: 18, width: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text("Update Password"),
+        _card(
+          title: "Profile Information",
+          message: profileMessage,
+          success: profileSuccess,
+          children: [
+            _field("Full Name", nameCtrl),
+            _field("Designation", designationCtrl),
+            _field("Email", emailCtrl, keyboard: TextInputType.emailAddress),
+            _field("Contact Number", contactCtrl, keyboard: TextInputType.phone),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: savingProfile ? null : saveProfile,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
+                child: savingProfile
+                    ? const SizedBox(
+                        height: 18, width: 18,
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    : const Text("Save Changes"),
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // ---- LOGOUT BUTTON ----
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade50,
-                foregroundColor: Colors.red.shade700,
-                elevation: 0,
-                side: BorderSide(color: Colors.red.shade200),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              icon: const Icon(Icons.logout, color: Colors.red),
-              label: const Text("Logout from Application", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-              onPressed: handleLogout,
             ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        _card(
+          title: "Change Password",
+          message: passwordMessage,
+          success: passwordSuccess,
+          children: [
+            _field("New Password", newPasswordCtrl, obscure: true),
+            _field("Confirm New Password", confirmPasswordCtrl, obscure: true),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: savingPassword ? null : savePassword,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: savingPassword
+                    ? const SizedBox(
+                        height: 18, width: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text("Update Password"),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+
+        // ---- LOGOUT BUTTON ----
+        SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade50,
+              foregroundColor: Colors.red.shade700,
+              elevation: 0,
+              side: BorderSide(color: Colors.red.shade200),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            icon: const Icon(Icons.logout, color: Colors.red),
+            label: const Text("Logout from Application", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            onPressed: handleLogout,
           ),
-          const SizedBox(height: 24),
-        ],
-      ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 

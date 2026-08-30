@@ -366,16 +366,19 @@ class _CtMarksScreenState extends State<CtMarksScreen> with SingleTickerProvider
                         return Container(
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey.shade200),
                           ),
-                          child: ListTile(
-                            title: Text(m['student_name'] ?? 'Student Marks'),
-                            subtitle: Text("Roll: ${m['roll_no'] ?? '-'}  |  CT: ${m['ct_number'] ?? '1'}"),
-                            trailing: Text(
-                              "${m['marks_obtained'] ?? 0} / ${m['max_marks'] ?? 20}",
-                              style: const TextStyle(fontWeight: FontWeight.bold, color: primaryColor),
+                          child: Material(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            child: ListTile(
+                              title: Text(m['student_name'] ?? 'Student Marks'),
+                              subtitle: Text("Roll: ${m['roll_no'] ?? '-'}  |  CT: ${m['ct_number'] ?? '1'}"),
+                              trailing: Text(
+                                "${m['marks_obtained'] ?? 0} / ${m['max_marks'] ?? 20}",
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: primaryColor),
+                              ),
                             ),
                           ),
                         );
